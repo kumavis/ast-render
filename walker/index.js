@@ -4,7 +4,9 @@ async = require('async')
 module.exports = walkTree
 
 function walkTree(tree, visit, callback) {
-  _walkTree({__root__: tree}, visit, callback)
+  _walkTree({__root__: tree}, visit, function(){
+    callback(null, tree)
+  })
 }
 
 function _walkTree(node, visit, callback){

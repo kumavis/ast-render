@@ -2,7 +2,7 @@ var match = require('pattern-match')
 var isObject = require('is-object')
 var isArray = require('is-array')
 var async = require('async')
-var walkTree = require('./walker.js')
+var walkTree = require('../walker/index.js')
 
 module.exports = AstTransformer
 
@@ -11,16 +11,16 @@ module.exports = AstTransformer
 function AstTransformer(opts) {
   // optional 'new' keyword
   if (!(this instanceof AstTransformer)) return new AstTransformer(opts)
-  this._initialize(opts)
+  this._initialize(opts || {})
 }
 
 AstTransformer.prototype = {
 
   _initialize: function(opts){
-    opts = opts || {}
     this.stopOnUnmatched = !!opts.stopOnUnmatched
 
     this._registry = {}
+    this.match = match
   },
 
   register: function(pattern, callback){
