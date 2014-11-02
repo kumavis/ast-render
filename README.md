@@ -1,4 +1,13 @@
-### ast-render
+### idea
+
+needed an easy way of generating bidirectional transformation rules for parsable languages.
+thought it would be neat if you just wrote the code you wanted to match instead of writing the AST you wanted to match. The generated rules are valid json, so they can be generated at run time or build time.
+
+### status
+
+transformation from code to xml is mostly working, though its not possible to specify node types in rules yet.
+the actual last leg of rendering the tree flat is not finished.
+transformation from xml to code is not ready.
 
 ###### specify rules
 
