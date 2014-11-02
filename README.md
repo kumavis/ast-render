@@ -46,6 +46,12 @@ console.log( "hay" );
 console.log( "wuurl" );
 ```
 
+### things at work
+tree walker/transformer
+rule-based AST transformer
+template-based AST rule-generator
+
+
 ### inspiration
 
 [structuredjs](https://github.com/Khan/structuredjs)
