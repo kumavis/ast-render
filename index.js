@@ -1,63 +1,61 @@
 var match = require('pattern-match')
+var isObject = require('is-object')
 var isArray = require('is-array')
 var async = require('async')
+var walkTree = require('./walker.js')
+
+module.exports = AstTransformer
 
 // setup registry
 
-module.exports = {
-  standardNode: standardNode,
-  convertAst: convertAst,
+function AstTransformer(opts) {
+  // optional 'new' keyword
+  if (!(this instanceof AstTransformer)) return new AstTransformer(opts)
+  this._initialize(opts)
 }
 
-var registry = {}
+AstTransformer.prototype = {
 
-function register(pattern, callback){
-  if (!registry[pattern.type]) registry[pattern.type] = []
-  var registered = registry[pattern.type]
-  registered.push({
-    pattern: pattern,
-    callback: callback,
-  })
-}
+  _initialize: function(opts){
+    opts = opts || {}
+    this.stopOnUnmatched = !!opts.stopOnUnmatched
 
-function standardNode(opts, callback) {
-  var pattern = { type: opts.type }
-  var childKeys = opts.children || []
-  var varKeys = opts.variables || []
-  callback = callback || function(_,cb){ cb() }
+    this._registry = {}
+  },
 
-  childKeys.forEach(function(key){
-    pattern[key] = match.var(key)
-  })
-
-  varKeys.forEach(function(key){
-    pattern[key] = match.var(key)
-  })
-
-  register(pattern, function(matched, cb){
-    callback(matched, function(){
-      var childNodes = childKeys.map(function(key){ return matched[key] })
-      async.map(childNodes, convertAst, cb)
+  register: function(pattern, callback){
+    var registry = this._registry
+    if (!registry[pattern.type]) registry[pattern.type] = []
+    var registered = registry[pattern.type]
+    registered.push({
+      pattern: pattern,
+      callback: callback,
     })
-  })
-}
+  },
 
-function convertAst(ast, callback){
-  var nodes = isArray(ast) ? ast : [ast]
-  async.map(nodes, tryNode, callback)
-}
+  convertAst: function(ast, callback){
+    walkTree( ast, this.tryNode.bind(this), callback)
+  },
 
-function tryNode(node, callback){
-  try {
-    match(node, function(when) {
-      var registered = registry[node.type] || []
-      registered.forEach(function(entry){
-        when(entry.pattern, function(matched){
-          entry.callback(matched, callback)
+  tryNode: function(node, key, parent, callback){
+    try {
+      // TODO: if registered.length is 0, skip to children
+      match(node, function(when) {
+        // last in has precedence
+        var registered = (this._registry[node.type] || []).slice().reverse()
+        registered.forEach(function(entry){
+          when(entry.pattern, function(matched){
+            entry.callback(node, key, parent, matched, callback)
+          })
         })
-      })
-    })
-  } catch (err) {
-    callback(err)
-  }
+      }, this)
+    } catch (err) {
+      if (err instanceof match.MatchError && !this.stopOnUnmatched) {
+        callback(null, node)
+      } else {
+        callback(err)
+      }
+    }
+  },
+
 }
