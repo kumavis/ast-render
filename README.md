@@ -7,25 +7,25 @@ code pattern:
 console.log( $_greeting )
 ```
 markup template:
-```js
+```xml
 <log>{{greeting.value}}</log>
 ```
 
-###### just add water...
+###### run your code through it...
 
 code source:
 ```js
 console.log( "yoho" );
 ```
 markup output: 
-```js
+```xml
 <log>yoho</log>
 ```
 
 ###### works both ways (well, it will eventually)
 
 markup source: 
-```js
+```xml
 <log>haay</log>
 <log>wuurl</log>
 ```
