@@ -2,18 +2,38 @@
 
 ###### specify rules
 
-code pattern: `console.log( $_greeting )`
-markup template: `<log>{{greeting.value}}</log>`
+code pattern: 
+```js
+console.log( $_greeting )
+```
+markup template:
+```js
+<log>{{greeting.value}}</log>
+```
 
 ###### just add water...
 
-code source: `console.log( "yoho" );`
-markup output: `<log>yoho</log>`
+code source:
+```js
+console.log( "yoho" );
+```
+markup output: 
+```js
+<log>yoho</log>
+```
 
-###### works both ways (it will eventually)
+###### works both ways (well, it will eventually)
 
-markup source: `<log>haay</log> <log>wuurl</log>`
-code output: `console.log( "hay" ); console.log( "wuurl" );`
+markup source: 
+```js
+<log>haay</log>
+<log>wuurl</log>
+```
+code output: 
+```js
+console.log( "hay" );
+console.log( "wuurl" );
+```
 
 ### inspiration
 
