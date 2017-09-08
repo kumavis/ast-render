@@ -1,5 +1,7 @@
 ### idea
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/kumavis/ast-render.svg)](https://greenkeeper.io/)
+
 needed an easy way of generating bidirectional transformation rules for parsable languages.
 thought it would be neat if you just wrote the code you wanted to match instead of writing the AST you wanted to match. The generated rules are valid json, so they can be generated at run time or build time.
 
